@@ -3,12 +3,16 @@ import { InputLoginUser } from 'src/modules/user/types';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Hasher } from 'src/helper/hasher';
 import { logger } from 'src/infra/logger';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class LoginUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly hasher: Hasher,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async execute({ email, password }: InputLoginUser) {
@@ -34,5 +38,21 @@ export class LoginUserUseCase {
     }
 
     logger.info('Email e senha correto');
+
+    const payload = {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    };
+
+    const jwt = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_SECRET_KEY'),
+    });
+
+    return {
+      acessToken: jwt,
+    };
   }
 }
