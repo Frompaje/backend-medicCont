@@ -11,8 +11,9 @@ export const envSchema = z.object({
   MAIL_HOST: z.string().optional(),
   MAIL_SECURE: z.coerce.boolean(),
   PG_USERNAME: z.string().default('postgres'),
-  PG_PASSWORD: z.string().default('password'),
+  PG_PASSWORD: z.string().default('medicPassword'),
   PG_DATABASE: z.string().default('medicContDB'),
+  DATABASE_URL: z.string().nonempty(),
 });
 
 export const validateEnv = (env: Record<string, any>) => {

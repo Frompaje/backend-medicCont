@@ -1,9 +1,10 @@
+version: '3'
 services:
-  bankGarupa:
-    image: bitnami/postgresql
+  medicContDB:
+    image: postgres:alpine
     ports:
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=${PG_USERNAME}
-      - POSTGRESQL_PASSWORD=${PG_PASSWORD}
-      - POSTGRESQL_DATABASE=${PG_DATABASE}
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DATABASE}
