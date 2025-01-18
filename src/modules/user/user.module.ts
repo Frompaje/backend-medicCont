@@ -7,12 +7,14 @@ import { UserRepository } from 'src/modules/user/app/repository/user.repository'
 import { CreateUserUseCase } from 'src/modules/user/app/use-cases/create-user.use-case';
 import { LoginUserUseCase } from 'src/modules/user/app/use-cases/login-user.use-case';
 import { UserController } from 'src/modules/user/http/user.controller';
+import { TokenGenerate } from 'src/helper/tokenGenerate';
 
 @Module({
   imports: [],
   controllers: [UserController],
   providers: [
     Hasher,
+    TokenGenerate,
     CreateUserUseCase,
     LoginUserUseCase,
     {
