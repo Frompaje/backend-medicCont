@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const envSchema = z.object({
   PORT: z.coerce.number().optional().default(3000),
   JWT_SECRET_KEY: z.string(),
-  JWT_EXPERIRATION_TIME: z.string(),
+  JWT_EXPIRATION_TIME: z.string(),
   MAIL_LOGIN: z.string().optional(),
   MAIL_PASSWORD: z.string().optional(),
   MAIL_HOST: z.string().optional(),
