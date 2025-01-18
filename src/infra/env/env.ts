@@ -1,5 +1,5 @@
+import { BadRequestException } from '@nestjs/common';
 import { logger } from 'src/infra/logger';
-import { InvalidEnvironmentVariableError } from 'src/shared/error/invalid-environment-varaible-error';
 import { z } from 'zod';
 
 export const envSchema = z.object({
@@ -23,7 +23,7 @@ export const validateEnv = (env: Record<string, any>) => {
     logger.error('Invalid environment variables');
     logger.error(_env.error.formErrors.fieldErrors);
 
-    throw new InvalidEnvironmentVariableError();
+    throw new BadRequestException('Envs invalidas');
   }
 
   return _env.data;
