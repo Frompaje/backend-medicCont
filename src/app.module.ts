@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from 'src/infra/database/database.module';
 import { validateEnv } from 'src/infra/env/env';
 import { UserModule } from 'src/modules/user/user.module';
 
@@ -10,6 +11,7 @@ import { UserModule } from 'src/modules/user/user.module';
       isGlobal: true,
     }),
     UserModule,
+    DatabaseModule,
   ],
   controllers: [],
   providers: [],
