@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from 'src/infra/env/env';
+import { UserModule } from 'src/modules/user/user.module';
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { validateEnv } from 'src/infra/env/env';
       validate: (env) => validateEnv(env),
       isGlobal: true,
     }),
+    UserModule,
   ],
   controllers: [],
   providers: [],

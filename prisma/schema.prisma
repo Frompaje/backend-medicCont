@@ -23,10 +23,10 @@ model User {
 model TaxDeclarations {
   id              Int      @id @default(autoincrement())
   year            DateTime
-  totalIncome     Float // rendimento_total
-  totalDeductions Float // deducoes_totais
-  taxDue          Float // imposto_devido
-  submissionDate  DateTime // data_envio
+  totalIncome     Float    @map("total_income") // rendimento_total
+  totalDeductions Float    @map("total_deduction") // deducoes_totais
+  taxDue          Float    @map("tax_due") // imposto_devido
+  submissionDate  DateTime @map("submission_date") // data_envio
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
