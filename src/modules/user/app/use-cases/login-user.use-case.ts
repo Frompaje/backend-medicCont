@@ -1,10 +1,10 @@
 import { UserRepository } from 'src/modules/user/app/repository/user.repository';
 import { InputLoginUser } from 'src/modules/user/types';
-import { InvalidDataError } from 'src/shared/error/invalid-data-error';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Hasher } from 'src/helper/hasher';
+import { logger } from 'src/infra/logger';
 
 @Injectable()
 export class LoginUserUseCase {
@@ -17,18 +17,23 @@ export class LoginUserUseCase {
 
   async execute({ email, password }: InputLoginUser) {
     if (!email || !password) {
-      throw new InvalidDataError();
+      logger.info('[ERROR-001] Dados invalidos');
+
+      throw new BadRequestException('Dados Inválidas');
     }
 
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
+      logger.info('[ERROR-002] Credenciais Inválidas');
+
       throw new BadRequestException('Credenciais Inválidas');
     }
 
     const isSamePassword = await this.hasher.compare(password, user.password);
 
     if (!isSamePassword) {
+      logger.info('[ERROR-002] Credenciais Inválidas');
       throw new BadRequestException('Credenciais Inválidas');
     }
 
@@ -43,6 +48,8 @@ export class LoginUserUseCase {
     const jwt = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET_KEY'),
     });
+
+    logger.info('Usuário logado');
 
     return {
       accesToken: jwt,

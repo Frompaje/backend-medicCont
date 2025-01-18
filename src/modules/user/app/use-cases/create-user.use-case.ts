@@ -1,8 +1,8 @@
 import { UserRepository } from 'src/modules/user/app/repository/user.repository';
 import { InputCreateUser } from 'src/modules/user/types';
-import { InvalidDataError } from 'src/shared/error/invalid-data-error';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Hasher } from 'src/helper/hasher';
+import { logger } from 'src/infra/logger';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -12,16 +12,20 @@ export class CreateUserUseCase {
   ) {}
   async execute({ name, email, password }: InputCreateUser) {
     if (!name || !email || !password) {
-      throw new InvalidDataError();
+      logger.error('[ERROR-001] Dados invalidos');
+      throw new BadRequestException();
     }
 
     const user = await this.userRepository.findByEmail(email);
 
     if (user) {
-      throw new InvalidDataError();
+      logger.error('[ERROR-002] Credenciais Inválidas');
+      throw new BadRequestException();
     }
+
     const passwordHashed = await this.hasher.hash(password);
 
+    logger.info('[Usecase] Usuário criado ');
     await this.userRepository.create({
       name,
       password: passwordHashed,

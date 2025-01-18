@@ -13,7 +13,7 @@ export class UserController {
 
   @Post()
   create(@Body() body: CreateUserDto) {
-    this.createUserUseCase.execute(body);
+    return this.createUserUseCase.execute(body);
   }
 
   @Post('login')
