@@ -12,3 +12,8 @@ export type InputCreateUser = {
   password: string;
   email: string;
 };
+
+export type InputLoginUser = {
+  password: string;
+  email: string;
+};
