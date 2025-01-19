@@ -2,25 +2,21 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CalculateTaxes {
-  execute({ totalIncome, deductionsTotal }: Input) {
-    const taxableIncome = totalIncome - deductionsTotal;
-    const faixaIncome = [
-      { faixa: 2.826, taxa: 7.5 },
-      { faixa: 3.751, taxa: 15 },
-      { faixa: 4.664, taxa: 22.5 },
-      { faixa: 5.535, taxa: 27.5 },
-      ,
-    ];
-
-    for (const value of faixaIncome) {
-      if (taxableIncome > value.faixa) {
-        return (taxableIncome * value.taxa) / 100;
-      }
+  execute(totalIncome: number) {
+    if (2259.2 > totalIncome) {
+      return (totalIncome * 0) / 100 - 0;
     }
-    return taxableIncome;
+    if (2259.21 < totalIncome && totalIncome < 2826.65) {
+      return (totalIncome * 7.5) / 100 - 169.44;
+    }
+    if (2826.66 < totalIncome && totalIncome < 3751.05) {
+      return (totalIncome * 15) / 100 - 381.44;
+    }
+    if (3751.06 < totalIncome && totalIncome < 4664.68) {
+      return (totalIncome * 22.5) / 100 - 662.77;
+    }
+    if (4664.68 < totalIncome) {
+      return (totalIncome * 27.5) / 100 - 896.0;
+    }
   }
 }
-type Input = {
-  totalIncome: number;
-  deductionsTotal: number;
-};

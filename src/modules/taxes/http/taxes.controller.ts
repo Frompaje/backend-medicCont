@@ -24,6 +24,7 @@ export class TaxeController {
       totalIncome: body.totalIncome,
       totalTax: body.totalTax,
       year: body.year,
+      dependents: body.dependents,
       userId: jwt.user.id,
     });
   }

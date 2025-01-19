@@ -5,6 +5,9 @@ export class CreateTaxesDto {
   totalIncome: number;
 
   @IsNumber()
+  dependents: number;
+
+  @IsNumber()
   deductionsTotal: number;
 
   @IsNumber()

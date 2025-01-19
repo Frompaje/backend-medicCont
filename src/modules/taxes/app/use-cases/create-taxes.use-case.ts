@@ -1,14 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { CalculateINSS } from 'src/helper/calculateINSS';
 import { CalculateTaxes } from 'src/helper/calculateTaxes';
 import { logger } from 'src/infra/logger';
 import { TaxesRepository } from 'src/modules/taxes/app/repository/taxes.repository';
-import { InputCreateTaxes } from 'src/modules/taxes/types';
 
 @Injectable()
 export class CreateTaxesUseCase {
   constructor(
     private readonly taxesRepository: TaxesRepository,
     private readonly calculateTaxes: CalculateTaxes,
+    private readonly calculateINSS: CalculateINSS,
   ) {}
 
   async execute({
@@ -17,24 +18,31 @@ export class CreateTaxesUseCase {
     submissionDate,
     totalIncome,
     userId,
+    dependents,
     year,
-  }: InputCreateTaxes) {
+  }: Input) {
     if (
       !deductionsTotal ||
       !monthlyTax ||
       !submissionDate ||
       !totalIncome ||
       !userId ||
-      !year
+      !year ||
+      !dependents
     ) {
       logger.error('[ERROR-001] Dados invalidos');
       throw new BadRequestException('[ERROR-001] Dados invalidos');
     }
 
-    const totalTaxYear = this.calculateTaxes.execute({
-      totalIncome,
-      deductionsTotal,
-    });
+    const INSS = this.calculateINSS.execute(totalIncome);
+
+    const dependentsValue = 189.59 * dependents;
+
+    const baseCalc = totalIncome - INSS - dependentsValue;
+
+    const totalTaxMoth = String(this.calculateTaxes.execute(baseCalc));
+
+    const totalTaxYear = Number(totalTaxMoth.slice(0, 6)) * 12;
 
     logger.info('[Usecase] Taxa criado');
     await this.taxesRepository.create({
@@ -48,3 +56,13 @@ export class CreateTaxesUseCase {
     });
   }
 }
+export type Input = {
+  userId: string;
+  dependents: number;
+  totalIncome: number;
+  deductionsTotal: number;
+  totalTax: number;
+  monthlyTax: number;
+  year: number;
+  submissionDate: Date;
+};

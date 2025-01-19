@@ -6,6 +6,7 @@ import { ListTaxesUseCase } from 'src/modules/taxes/app/use-cases/list-taxes.use
 import { TaxeController } from 'src/modules/taxes/http/taxes.controller';
 import { JwtService } from '@nestjs/jwt';
 import { CalculateTaxes } from 'src/helper/calculateTaxes';
+import { CalculateINSS } from 'src/helper/calculateINSS';
 
 @Module({
   imports: [],
@@ -14,6 +15,7 @@ import { CalculateTaxes } from 'src/helper/calculateTaxes';
     CreateTaxesUseCase,
     ListTaxesUseCase,
     CalculateTaxes,
+    CalculateINSS,
     {
       provide: TaxesRepository,
       useClass: PrismaTaxesRepository,
