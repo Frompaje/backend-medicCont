@@ -1,4 +1,4 @@
-import { InputCreateTaxes, Taxes } from 'src/modules/taxes/types';
+import { InputCreateTaxes, ListInput, Taxes } from 'src/modules/taxes/types';
 
 export abstract class TaxesRepository {
   abstract create({
@@ -9,5 +9,7 @@ export abstract class TaxesRepository {
     totalIncome,
   }: InputCreateTaxes): Promise<void>;
 
-  abstract listByUserId(userId: string): Promise<Taxes[]>;
+  abstract list(userId: string, data: ListInput): Promise<Taxes[]>;
+
+  abstract count(userId: string, search?: number): Promise<number>;
 }

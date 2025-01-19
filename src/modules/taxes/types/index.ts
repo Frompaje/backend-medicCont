@@ -8,6 +8,12 @@ export type InputCreateTaxes = {
   submissionDate: Date;
 };
 
+export type ListInput = {
+  page: number;
+  take: number;
+  search?: number;
+};
+
 export type Taxes = {
   id: number;
   userId: string;

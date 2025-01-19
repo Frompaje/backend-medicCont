@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/infra/database/database.service';
 import { TaxesRepository } from 'src/modules/taxes/app/repository/taxes.repository';
-import { InputCreateTaxes, Taxes } from 'src/modules/taxes/types';
+import { InputCreateTaxes, ListInput, Taxes } from 'src/modules/taxes/types';
 
 @Injectable()
 export class PrismaTaxesRepository implements TaxesRepository {
@@ -33,11 +33,26 @@ export class PrismaTaxesRepository implements TaxesRepository {
     });
   }
 
-  async listByUserId(userId: string): Promise<Taxes[]> {
+  async list(userId: string, data: ListInput): Promise<Taxes[]> {
     return this.prisma.taxDeclarations.findMany({
       where: {
-        users: {
-          id: userId,
+        userId,
+        OR: [
+          {
+            year: { equals: data.search },
+          },
+        ],
+      },
+      take: data.take,
+      skip: (data.page - 1) * data.take,
+    });
+  }
+  count(userId: string, search?: number): Promise<number> {
+    return this.prisma.taxDeclarations.count({
+      where: {
+        userId,
+        year: {
+          equals: search,
         },
       },
     });
