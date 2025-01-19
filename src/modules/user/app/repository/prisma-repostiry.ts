@@ -6,6 +6,7 @@ import { InputCreateUser, User } from 'src/modules/user/types';
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: DatabaseService) {}
+
   async create({ name, password, email }: InputCreateUser) {
     await this.prisma.user.create({
       data: {

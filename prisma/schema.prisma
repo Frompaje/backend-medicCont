@@ -16,16 +16,15 @@ model User {
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
   TaxDeclarations TaxDeclarations[]
-  Token           Token?
 
-  @@map("Users")
+  @@map("users")
 }
 
 model TaxDeclarations {
   id              Int      @id @default(autoincrement())
   year            Int
   totalIncome     Float    @map("total_income") // rendimento_total_anual
-  DeductionsTotal Float    @map("total_deduction") // deducoes_total_dependentes
+  deductionsTotal Float    @map("total_deduction") // deducoes_total_dependentes
   submissionDate  DateTime @map("submission_date") // data_envio
   totalTax        Float    @map("total_tax") // total_de_taxa_anual
   monthlyTax      Float    @map(" monthly_tax") // total_de_taxa_mensal
@@ -37,14 +36,4 @@ model TaxDeclarations {
   userId String
 
   @@map("tax_declarations")
-}
-
-model Token {
-  id String @id @default(uuid())
-
-  User User @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @map("created_at")
-  expiresAt DateTime @map("expires_at")
-  userId    String   @unique
 }
