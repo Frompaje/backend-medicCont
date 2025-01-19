@@ -13,14 +13,14 @@ export class CreateUserUseCase {
   async execute({ name, email, password }: InputCreateUser) {
     if (!name || !email || !password) {
       logger.error('[ERROR-001] Dados invalidos');
-      throw new BadRequestException();
+      throw new BadRequestException('[ERROR-001] Dados invalidos');
     }
 
     const user = await this.userRepository.findByEmail(email);
 
     if (user) {
       logger.error('[ERROR-002] Credenciais Inválidas');
-      throw new BadRequestException();
+      throw new BadRequestException('[ERROR-002] Credenciais Inválidas');
     }
 
     const passwordHashed = await this.hasher.hash(password);

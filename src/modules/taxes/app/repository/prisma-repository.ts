@@ -41,6 +41,12 @@ export class PrismaTaxesRepository implements TaxesRepository {
           {
             year: { equals: data.search },
           },
+          {
+            userId: {
+              contains: String(data.search),
+              mode: 'insensitive',
+            },
+          },
         ],
       },
       take: data.take,
@@ -51,9 +57,17 @@ export class PrismaTaxesRepository implements TaxesRepository {
     return this.prisma.taxDeclarations.count({
       where: {
         userId,
-        year: {
-          equals: search,
-        },
+        OR: [
+          {
+            year: { equals: search },
+          },
+          {
+            userId: {
+              contains: String(search),
+              mode: 'insensitive',
+            },
+          },
+        ],
       },
     });
   }
