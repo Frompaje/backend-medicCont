@@ -18,13 +18,11 @@ export class TaxeController {
   @Post()
   create(@Body() body: CreateTaxesDto, @AuthUser() jwt: JwtPayload) {
     this.createTaxesUseCase.execute({
-      deductionsTotal: body.deductionsTotal,
-      monthlyTax: body.monthlyTax,
       submissionDate: body.submissionDate,
       totalIncome: body.totalIncome,
-      totalTax: body.totalTax,
       year: body.year,
       dependents: body.dependents,
+      status: body.status,
       userId: jwt.user.id,
     });
   }

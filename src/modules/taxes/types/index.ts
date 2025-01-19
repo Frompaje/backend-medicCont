@@ -1,11 +1,13 @@
+import { $Enums } from '@prisma/client';
+
 export type InputCreateTaxes = {
   userId: string;
-  totalIncome: number;
-  deductionsTotal: number;
+  year: number;
   totalTax: number;
   monthlyTax: number;
-  year: number;
+  taxBase: number;
   submissionDate: Date;
+  status?: $Enums.Status;
 };
 
 export type ListInput = {
@@ -17,13 +19,12 @@ export type ListInput = {
 export type Taxes = {
   id: number;
   userId: string;
-  year: number;
-  totalIncome: number;
-  deductionsTotal: number;
-  submissionDate: Date;
-  totalTax: number;
   monthlyTax: number;
-
+  submissionDate: Date;
+  year: number;
+  totalTax: number;
+  taxBase: number;
   createdAt: Date;
   updatedAt: Date;
+  status: string;
 };

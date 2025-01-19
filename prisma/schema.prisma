@@ -21,19 +21,24 @@ model User {
 }
 
 model TaxDeclarations {
-  id              Int      @id @default(autoincrement())
-  year            Int
-  totalIncome     Float    @map("total_income") // rendimento_total_anual
-  deductionsTotal Float    @map("total_deduction") // deducoes_total_dependentes
-  submissionDate  DateTime @map("submission_date") // data_envio
-  totalTax        Float    @map("total_tax") // total_de_taxa_anual
-  monthlyTax      Float    @map(" monthly_tax") // total_de_taxa_mensal
+  id             Int      @id @default(autoincrement())
+  year           Int
+  totalTax       Float    @map("total_tax") // total_de_taxa_anual
+  monthlyTax     Float    @map("monthly_tax") // total_de_taxa_mensal
+  taxBase        Float    @map("tax_base") // base_de_calculo
+  submissionDate DateTime @map("submission_date") // data_envio
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  status Status @default(Unsubmitted)
   users  User   @relation(fields: [userId], references: [id])
   userId String
 
   @@map("tax_declarations")
+}
+
+enum Status {
+  Unsubmitted
+  Submitted
 }

@@ -9,21 +9,21 @@ export class PrismaTaxesRepository implements TaxesRepository {
 
   async create({
     userId,
-    totalTax,
-    deductionsTotal,
-    monthlyTax,
-    totalIncome,
     year,
+    totalTax,
+    monthlyTax,
+    taxBase,
     submissionDate,
+    status,
   }: InputCreateTaxes): Promise<void> {
     await this.prisma.taxDeclarations.create({
       data: {
         totalTax,
-        deductionsTotal,
         monthlyTax,
-        totalIncome,
         year,
+        taxBase,
         submissionDate,
+        status,
         users: {
           connect: {
             id: userId,

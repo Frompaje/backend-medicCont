@@ -4,9 +4,9 @@ export abstract class TaxesRepository {
   abstract create({
     userId,
     totalTax,
-    deductionsTotal,
-    monthlyTax,
-    totalIncome,
+    submissionDate,
+    year,
+    status,
   }: InputCreateTaxes): Promise<void>;
 
   abstract list(userId: string, data: ListInput): Promise<Taxes[]>;

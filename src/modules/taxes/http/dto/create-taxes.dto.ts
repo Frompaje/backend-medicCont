@@ -1,4 +1,5 @@
-import { IsDate, IsNumber } from 'class-validator';
+import { Status } from '@prisma/client';
+import { IsDate, IsEnum, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateTaxesDto {
   @IsNumber()
@@ -8,16 +9,11 @@ export class CreateTaxesDto {
   dependents: number;
 
   @IsNumber()
-  deductionsTotal: number;
-
-  @IsNumber()
-  totalTax: number;
-
-  @IsNumber()
-  monthlyTax: number;
-
-  @IsNumber()
   year: number;
+
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 
   @IsDate()
   submissionDate: Date;

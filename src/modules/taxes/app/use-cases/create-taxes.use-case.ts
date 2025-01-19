@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Status } from '@prisma/client';
 import { CalculateINSS } from 'src/helper/calculateINSS';
 import { CalculateTaxes } from 'src/helper/calculateTaxes';
 import { logger } from 'src/infra/logger';
@@ -13,23 +14,14 @@ export class CreateTaxesUseCase {
   ) {}
 
   async execute({
-    deductionsTotal,
-    monthlyTax,
     submissionDate,
     totalIncome,
     userId,
     dependents,
     year,
+    status,
   }: Input) {
-    if (
-      !deductionsTotal ||
-      !monthlyTax ||
-      !submissionDate ||
-      !totalIncome ||
-      !userId ||
-      !year ||
-      !dependents
-    ) {
+    if (!submissionDate || !totalIncome || !userId || !year || !dependents) {
       logger.error('[ERROR-001] Dados invalidos');
       throw new BadRequestException('[ERROR-001] Dados invalidos');
     }
@@ -38,21 +30,21 @@ export class CreateTaxesUseCase {
 
     const dependentsValue = 189.59 * dependents;
 
-    const baseCalc = totalIncome - INSS - dependentsValue;
+    const baseCalc = Number(totalIncome - INSS - dependentsValue);
 
-    const totalTaxMoth = String(this.calculateTaxes.execute(baseCalc));
+    const totalTaxMoth = this.calculateTaxes.execute(baseCalc);
 
-    const totalTaxYear = Number(totalTaxMoth.slice(0, 6)) * 12;
+    const totalTaxYear = Number(String(totalTaxMoth).slice(0, 6)) * 12;
 
     logger.info('[Usecase] Taxa criado');
     await this.taxesRepository.create({
       userId,
-      deductionsTotal,
-      monthlyTax,
       submissionDate,
-      totalIncome,
+      monthlyTax: totalTaxMoth,
+      taxBase: baseCalc,
       totalTax: totalTaxYear,
       year,
+      status,
     });
   }
 }
@@ -60,9 +52,7 @@ export type Input = {
   userId: string;
   dependents: number;
   totalIncome: number;
-  deductionsTotal: number;
-  totalTax: number;
-  monthlyTax: number;
   year: number;
+  status?: Status;
   submissionDate: Date;
 };
