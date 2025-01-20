@@ -52,7 +52,7 @@ export class LoginUserUseCase {
     });
 
     return {
-      acessToken: jwt,
+      accessToken: jwt,
     };
   }
 }
